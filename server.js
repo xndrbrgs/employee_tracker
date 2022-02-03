@@ -75,7 +75,7 @@ function mainMenu() {
 // Function to return departments 
 
 returnDepartments = () => {
-    db.query("SELECT employees.first_name, employees.last_name, department.name AS Department FROM employees JOIN role ON employees.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employees.id;", 
+    db.query("SELECT department.id AS id, department.name AS Department FROM department", 
     (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -86,7 +86,8 @@ returnDepartments = () => {
 // Function to return roles 
 
 returnRoles = () => {
-    db.query("SELECT employees.first_name, employees.last_name, role.title AS Title FROM employees JOIN role ON employees.role_id = role.id", (err, res) => {
+    db.query("SELECT roles.id, roles.title, department.name AS Department FROM role INNER JOIN department ON role.department_id = department.id", 
+    (err, res) => {
         if (err) throw err;
         console.table(res);
         mainMenu();
@@ -95,6 +96,13 @@ returnRoles = () => {
 
 // Function to return all employees 
 
-
+returnEmployees = () => {
+    db.query("SELECT employees.id, employees.first_name, employees.last_name, role.title, department.name AS Department, role.salary",
+    (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        mainMenu();
+    })
+}
 
 
