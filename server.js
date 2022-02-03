@@ -75,7 +75,7 @@ function mainMenu() {
 // Function to return departments 
 
 returnDepartments = () => {
-    db.query("SELECT department.id AS id, department.name AS Department FROM department", 
+    db.query("SELECT * FROM department", 
     (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -86,7 +86,7 @@ returnDepartments = () => {
 // Function to return roles 
 
 returnRoles = () => {
-    db.query("SELECT roles.id, roles.title, department.name AS Department FROM role INNER JOIN department ON role.department_id = department.id", 
+    db.query("SELECT * FROM roles", 
     (err, res) => {
         if (err) throw err;
         console.table(res);
@@ -97,12 +97,15 @@ returnRoles = () => {
 // Function to return all employees 
 
 returnEmployees = () => {
-    db.query("SELECT employees.id, employees.first_name, employees.last_name, role.title, department.name AS Department, role.salary",
+    db.query("SELECT * FROM roles",
     (err, res) => {
         if (err) throw err;
         console.table(res);
         mainMenu();
     })
 }
+
+// Function to add a new department 
+
 
 
