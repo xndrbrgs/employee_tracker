@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Password and user .env file
+.env
