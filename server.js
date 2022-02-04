@@ -3,16 +3,17 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cTable = require('console.table');
+
 require('dotenv').config()
 
 // Connection to the MySQL database 
 
 const db = mysql.createConnection(
   {
-    host: "localhost",
+    host: 'localhost',
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
-    database: "employees_db",
+    database: 'employees_db',
   }
 );
 
@@ -30,7 +31,7 @@ function mainMenu() {
     inquirer
     .prompt([
         {
-            name: "choice",
+            name: "choices",
             type: 'list',
             message: "MAIN MENU",
             choices: [
@@ -45,37 +46,38 @@ function mainMenu() {
             ]
         }
     ])
-    .then((answer) => {
+    .then((answers) => {
+        const {choices} = answers;
         
-        if (answer === "View all departments") {
+        if (choices === "View all departments") {
             returnDepartments();
         }
         
-        if (answer === "View all roles") {
+        if (choices === "View all roles") {
             returnRoles();
         }
 
-        if (answer === "View all employees") {
+        if (choices === "View all employees") {
             returnEmployees();
         }
 
-        if (answer === "Add a department") {
+        if (choices === "Add a department") {
             returnNewDepartment();
         }
 
-        if (answer === "Add a role") {
+        if (choices === "Add a role") {
             returnNewRole();
         }
 
-        if (answer === "Add an employee") {
+        if (choices === "Add an employee") {
             returnNewEmployee();
         }
 
-        if (answer === "Update an employee's role") {
+        if (choices === "Update an employee's role") {
             updateEmpRole();
         }
 
-        if (answer === "No Action") {
+        if (choices === "No Action") {
             db.end();
         };
     });
