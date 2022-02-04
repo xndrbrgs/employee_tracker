@@ -242,13 +242,43 @@ returnNewRole = () => {
                 name: "salary",
                 type: "input",
                 message: "What salary is earned in this role?"
+            },
+            {
+                name: "Department",
+                type: "input",
+                choices: () => {
+                    var departmentArr = [];
+
+                    for (var i = 0; i < res.length; i++) {
+                        departmentArr.push(res[i].name);
+                    }
+
+                    return departmentArr;
+                }
             }
         ]).then((answer) => {
-            db.query("INSERT INTO roles SET ?",{
-                title: answer.title,
-                salary: answer.salary
-            }, (err, res) => {
+            let department_id;
+
+            for (var i = 0; i < res.length; i++) {
+                if(res[i].name == answer.Department) {
+                    department_id = res[i].id;
+                }
+            }
+
+            db.query("INSERT INTO roles SET ?",
+                {
+                    title: answer.newRole,
+                    salary: answer.salary,
+                    department_id: department_id
+                }, 
+            
+            (err, res) => {
                 if (err) throw err;
+                console.log(`
+                
+                Your new role has been created!
+                
+                `);
                 console.table(answer);
                 mainMenu();
             })
