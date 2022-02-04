@@ -231,3 +231,49 @@ returnNewRole = () => {
 
 // Function to update employer role
 
+updateEmpRole = () => {
+    db.query("SELECT employees.last_name, roles.title FROM employees JOIN roles ON employees.roles_id = roles.id;", 
+    (err, res) => {
+        if (err) throw err;
+        
+        inquirer
+        .prompt([
+            {
+                name: "lName",
+                type: "rawlist",
+                message: "What is this employee's last name?",
+                choices: () => {
+                    var checkLastName = [];
+                    
+                    for (var i =0; i < res.length; i++) {
+                        checkLastName.push(res[i].last_name);
+                    }
+
+                    return checkLastName;
+                }
+            },
+            {
+                name: "empRole",
+                type: "rawlist",
+                message: "What is this employee's role?",
+                choices: selectNewRole()
+            }
+        ]).then((answer) => {
+            var newEmpRole = selectNewRole().indexOf(answer.empRole) + 1;
+            db.query("UPDATE employees SET WHERE ?", 
+            {
+                last_name: answer.checkLastName
+            },
+
+            {
+                role_id: newEmpRole
+            },
+
+            (err, res) => {
+                if (err) throw err;
+                console.table(answer);
+                mainMenu();
+            })
+        })
+    })
+};
