@@ -13,9 +13,16 @@ const db = mysql.createConnection(
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: "employees_db",
-  },
-  console.log(`Connected to the employees_db database.`)
+  }
 );
+
+// Check to see if SQL connection is occuring 
+
+db.connect((err, res) => {
+    if (err) throw err;
+    console.log(`Connected to the employees_db database.`);
+    mainMenu();
+})
 
 // This function displays the main menu in Node
 
