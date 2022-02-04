@@ -289,45 +289,58 @@ returnNewRole = () => {
 // Function to update employer role
 
 updateEmpRole = () => {
-    db.query("SELECT employees.last_name, roles.title FROM employees JOIN roles ON employees.roles_id = roles.id;", 
+    db.query("SELECT * FROM employees", 
     (err, res) => {
         if (err) throw err;
         
+        const employeeChosen = [];
+        res.forEach(({first_name, last_name, id}) => {
+            employeeChosen.push({
+                name: first_name + " " + last_name,
+                value: id
+            })
+        })
+
+    db.query("SELECT * FROM roles", 
+    (err, res) => {
+        if (err) throw err;
+
+        const rolesChoice = [];
+        res.forEach(({title, id}) => {
+            rolesChoice.push({
+                name: title,
+                value: id
+            })
+        })
+    })    
+    
+    let questions = [
+        {
+            name: "id",
+            type: "list",
+            message: "What is this employee's name?",
+            choices: employeeChosen
+        },
+        {
+            name: "role",
+            type: "rawlist",
+            message: "What is this employee's new role?",
+            choices: rolesChoice
+        }
+    ];
+
         inquirer
-        .prompt([
-            {
-                name: "lName",
-                type: "rawlist",
-                message: "What is this employee's last name?",
-                choices: () => {
-                    var checkLastName = [];
-                    
-                    for (var i =0; i < res.length; i++) {
-                        checkLastName.push(res[i].last_name);
-                    }
-
-                    return checkLastName;
-                }
-            },
-            {
-                name: "empRole",
-                type: "rawlist",
-                message: "What is this employee's role?",
-                choices: selectNewRole()
-            }
-        ]).then((answer) => {
-            var newEmpRole = selectNewRole().indexOf(answer.empRole) + 1;
-            db.query("UPDATE employees SET WHERE ?", 
-            {
-                last_name: answer.checkLastName
-            },
-
-            {
-                role_id: newEmpRole
-            },
-
+        .prompt(questions).then((answer) => {
+            db.query("UPDATE employees SET WHERE ?? = ?", 
+            [
+                {
+                    role_id: answer.role
+                }, 
+                "id", answer.id
+            ],
             (err, res) => {
                 if (err) throw err;
+                console.log(res);
                 console.table(answer);
                 mainMenu();
             })
