@@ -22,7 +22,7 @@ const db = mysql.createConnection(
 db.connect((err, res) => {
     if (err) throw err;
     console.log(`
-    
+
     Connected to the employees_db database.
     
     `);
@@ -127,14 +127,25 @@ returnNewDepartment = () => {
     inquirer
     .prompt([
         {
-            name: "department",
+            name: "newDepartment",
             type: "input",
             message: "What new department did you want to add?"
         }
     ]).then((answer) => {
-        db.query("INSERT INTO department SET ?", {name: answer.name}, (err) => {
+        db.query("INSERT INTO department SET ?", 
+        {
+            name: answer.newDepartment
+        })
+
+        db.query("SELECT * FROM department", 
+        (err, res) => {
             if (err) throw err;
-            console.table(answer);
+            console.log(`
+            
+            New department has beed added!
+            
+            `)
+            console.table(res);
             mainMenu();
         })
     })
