@@ -2,7 +2,7 @@
 
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const consoleTable = require('console.table');
+const cTable = require('console.table');
 require('dotenv').config()
 
 // Connection to the MySQL database 
@@ -40,11 +40,13 @@ function mainMenu() {
                 "Add a department",
                 "Add a role",
                 "Add an employee",
-                "Update an employee's role"
+                "Update an employee's role",
+                "No Action"
             ]
         }
     ])
     .then((answer) => {
+        
         if (answer === "View all departments") {
             returnDepartments();
         }
@@ -85,7 +87,8 @@ returnDepartments = () => {
     db.query("SELECT * FROM department", 
     (err, res) => {
         if (err) throw err;
-        console.table(res);
+        console.log("All Departments", res);
+        // console.table(res);
         mainMenu();
     })
 };
@@ -104,7 +107,7 @@ returnRoles = () => {
 // Function to return all employees 
 
 returnEmployees = () => {
-    db.query("SELECT * FROM roles",
+    db.query("SELECT * FROM employees",
     (err, res) => {
         if (err) throw err;
         console.table(res);
