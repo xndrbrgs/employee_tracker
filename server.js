@@ -107,5 +107,127 @@ returnEmployees = () => {
 
 // Function to add a new department 
 
+returnNewDepartment = () => {
+    inquirer
+    .prompt([
+        {
+            name: "department",
+            type: "input",
+            message: "What new department did you want to add?"
+        }
+    ]).then((answer) => {
+        db.query("INSERT INTO department SET ?", {name: answer.name}, (err) => {
+            if (err) throw err;
+            console.table(answer);
+            mainMenu();
+        })
+    })
+};
 
+// Function to add a new employee
+
+returnNewEmployee = () => {
+    inquirer
+    .prompt([
+        {
+            name: "first_name",
+            type: "input",
+            message: "Enter employee's first name"
+        },
+        
+        {
+            name: "last_name",
+            type: "input",
+            message: "Enter employee's last name"
+        },
+        {
+            name: "role",
+            type: "list",
+            message: "Enter employee's role",
+            choices: selectNewRole()
+        },
+        {
+            name: "manager",
+            type: "rawlist",
+            message: "Who is this employee's manager?",
+            choices: selectEmployeeManager()
+        },
+    ]).then((answer) => {
+        let newRoleID = selectNewRole().indexOf(answer.role) + 1;
+        let newManagerID = selectEmployeeManager().indexOf(answer.manager) + 1;
+        db.query("INSERT INTO employees SET ?", {
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            manager_id: newManagerID,
+            roles_id: newRoleID
+        }, (err, res) => {
+            if (err) throw err;
+            console.table(answer);
+            mainMenu();
+        })
+    })
+}
+
+selectNewRole = () => {
+    const newRolesArr = [];
+
+    db.query("SELECT * FROM roles", (err, res) => {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            var specificRole = res[i];
+            newRolesArr.push(specificRole.title);
+        }
+    })
+
+    return newRolesArr;
+}
+
+selectEmployeeManager = () => {
+    const newManagerArr = [];
+
+    db.query("SELECT first_name, last_name FROM employees WHERE manager_id IS NULL", 
+    (err, res) => {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            var specificManager = res[i];
+            newManagerArr.push(specificManager.first_name);
+        }
+    })
+
+    return newManagerArr;
+}
+
+
+// Function to add a new role
+
+returnNewRole = () => {
+    db.query("SELECT * FROM department", (err, res) => {
+        if (err) throw err;
+
+        inquirer
+        .prompt([
+            {
+                name: "newRole",
+                type: "input",
+                message: "What role do you want to add?"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What salary is earned in this role?"
+            }
+        ]).then((answer) => {
+            db.query("INSERT INTO roles SET ?",{
+                title: answer.title,
+                salary: answer.salary
+            }, (err, res) => {
+                if (err) throw err;
+                console.table(answer);
+                mainMenu();
+            })
+        })
+    })
+}
+
+// Function to update employer role
 
