@@ -5,6 +5,10 @@
   ## Description
 
   The Employee Tracker is a CLI application that is meant for business owners to maintain their company data base. This application was built on MySQL and supported by Node.js, key ingredients for the structuring of the project. This application can be used as a solid base to allow managers to view all of their employees, their roles in the company, as well as all of the departments that fall under the company. 
+  
+  [To watch how the application works, click here!](https://watch.screencastify.com/v/Kj3BfxT25skqeFAsvrZg)
+  
+  ![Gif](https://media.giphy.com/media/2SLWNeAMMA1GHmv8fE/giphy.gif)
 
   ## Table of Contents
   - [Description](#description)
